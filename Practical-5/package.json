@@ -1,0 +1,20 @@
+{
+  "name": "practical-5",
+  "version": "1.0.0",
+  "description": "MongoDB and Mongoose task management API",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js",
+    "test": "node --check app.js && node --check routes/taskRoutes.js && node --check models/Task.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "mongoose": "^8.12.1"
+  }
+}
