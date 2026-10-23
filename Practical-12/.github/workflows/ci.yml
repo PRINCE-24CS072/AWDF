@@ -1,0 +1,49 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build & Test Backend
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+
+    env:
+      PORT: 5000
+      MONGO_URI: mongodb://localhost:27017/taskmanager_ci_test
+      JWT_SECRET: practical12_ci_jwt_secret_key_2024
+      NODE_ENV: test
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Backend Automated Tests
+        run: npm test
+
+      - name: Audit Docker & Container Architecture
+        run: node test_practical11.js
+
+      - name: Build Frontend Application
+        run: |
+          cd frontend
+          npm install
+          npm run build

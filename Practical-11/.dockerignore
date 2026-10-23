@@ -1,0 +1,27 @@
+# Dependency directories
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sub-projects
+frontend
+
+# Environment and sensitive configuration files
+.env
+.env.*
+!.env.example
+
+# Version control
+.git
+.github
+.gitignore
+
+# Documentation, screenshots, and logs
+screenshots
+*.log
+coverage
+
+# Operating system files
+.DS_Store
+Thumbs.db
