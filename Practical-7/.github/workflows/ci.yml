@@ -1,0 +1,63 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Verify Project Structure
+        run: |
+          echo "Verifying key files..."
+          test -f server.js && echo "✅ server.js"
+          test -f models/User.js && echo "✅ models/User.js"
+          test -f models/Task.js && echo "✅ models/Task.js"
+          test -f middleware/auth.js && echo "✅ middleware/auth.js"
+          test -f middleware/validate.js && echo "✅ middleware/validate.js"
+          test -f routes/auth.js && echo "✅ routes/auth.js"
+          test -f routes/tasks.js && echo "✅ routes/tasks.js"
+          test -f public/index.html && echo "✅ public/index.html"
+          echo "All files verified!"
+
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    needs: build
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
